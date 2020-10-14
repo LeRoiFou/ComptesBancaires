@@ -1,5 +1,6 @@
 """
 Saisie de deux comptes bancaires : compte chèques et livret A
+À compléter avec les exceptions ;-)
 
 Éditeur : Laurent REYNAUD
 Date : 14-10-2020
@@ -15,15 +16,29 @@ class CompteBancaire:
         self.libelle = libelle
         self.montant = montant
 
+    """ Getters """
+    def get_date(self):
+        return self.date
+
+    def get_libelle(self):
+        return self.libelle
+
+    def get_montant(self):
+        return self.montant
+
 
 """Intanciation de la classe CompteBancaire et déclaration des valeurs des deux comptes bancaires en les convertissant
 sous la forme d'un dictionnaire afin de conserver les données saisies"""
 CompteCheque = CompteBancaire('01-01-20', 'Ouverture du compte chèque', 0.00)
-OperationsCC = {'Compte chèque :': '123', 'Date :': [CompteCheque.date], 'Libellé :': [CompteCheque.libelle],
-                'Montant :': [CompteCheque.montant]}
+OperationsCC = {'Compte chèque :': '123',
+                'Date :': [CompteCheque.get_date()],
+                'Libellé :': [CompteCheque.get_libelle()],
+                'Montant :': [CompteCheque.get_montant()]}
 LivretA = CompteBancaire('01-01-20', 'Ouverture du livret A', 0.00)
-OperationsLA = {'Livret A :': '456', 'Date :': [LivretA.date], 'Libellé :': [LivretA.libelle],
-                'Montant :': [LivretA.montant]}
+OperationsLA = {'Livret A :': '456',
+                'Date :': [LivretA.get_date()],
+                'Libellé :': [LivretA.get_libelle()],
+                'Montant :': [LivretA.get_montant()]}
 
 """Sérialisation"""
 file = open('C:/Users/LRCOM/PycharmProjects/ComptesBancaires/MesComptes.txt', 'rb')
@@ -99,6 +114,21 @@ while option != 8:
 
     """Virement de compte à compte"""
     if option == 5:
+        date_operation = input('Date : ')
+        OperationsCC['Date :'].append(date_operation)
+        OperationsLA['Date :'].append(date_operation)
+        libelle_operation = input('Libellé : ')
+        OperationsCC['Libellé :'].append(libelle_operation)
+        OperationsLA['Libellé :'].append(libelle_operation)
+        compteDebite = input('Compte à débiter (CC/LA) : ')
+        if compteDebite == 'cc' or compteDebite == 'CC':
+            montant_operation = float(input('Montant : '))
+            OperationsCC['Montant :'].append(- montant_operation)
+            OperationsLA['Montant :'].append(montant_operation)
+        elif compteDebite == 'la' or compteDebite == 'LA':
+            montant_operation = float(input('Montant : '))
+            OperationsCC['Montant :'].append(montant_operation)
+            OperationsLA['Montant :'].append(-montant_operation)
         print()
 
     """Édition des opérations saisies"""
@@ -108,12 +138,12 @@ while option != 8:
             for k, v in OperationsCC.items():
                 print(k, v)
             cumulCC = sum(OperationsCC['Montant :'])
-            print('Le solde du compte chèque :', cumulCC, '€')
+            print('Le solde du compte chèque :', round(cumulCC, 2), '€')
         if option == 'la' or option == 'LA':
             for k, v in OperationsLA.items():
                 print(k, v)
             cumulLA = sum(OperationsLA['Montant :'])
-            print('Le solde du livret A :', cumulLA, '€')
+            print('Le solde du livret A :', round(cumulLA, 2), '€')
         print()
 
     """Sauvegarde des données"""
@@ -122,7 +152,7 @@ while option != 8:
         pickle.dump(OperationsCC, file)
         pickle.dump(OperationsLA, file)
         file.close()
-        print('Sauvegarde effectuée')
+        print('Sauvegarde effectuée !')
         print()
 
     """Sortie du programme"""
