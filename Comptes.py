@@ -58,7 +58,14 @@ while option != 8:
     print('6- Édition des opérations saisies')
     print('7- Sauvegarde des données')
     print('8- Sortie du programme')
-    option = int(input('Quelle option ? '))
+    try:
+        option = int(input('Quelle option ? '))
+        if option < 1 or option > 8:
+            print('Le chiffre doit être compris entre 1 et 8... tu sais compter ?')
+            print()
+    except ValueError:
+        print("Demande de saisie d'un chiffre...")
+        print()
 
     """Saisie des opérations sur le compte chèque"""
     if option == 1:
@@ -68,8 +75,12 @@ while option != 8:
             OperationsCC['Date :'].append(date_operation)
             libelle_operation = input('Libellé : ')
             OperationsCC['Libellé :'].append(libelle_operation)
-            montant_operation = float(input('Montant : '))
-            OperationsCC['Montant :'].append(montant_operation)
+            try:
+                montant_operation = float(input('Montant : '))
+                OperationsCC['Montant :'].append(montant_operation)
+            except ValueError:
+                print('Demande de saisie de chiffres...')
+                OperationsCC['Montant :'].append(0.00)
             choix = input('Nouvelle saisie (o/n) ? ')
         print()
 
@@ -77,12 +88,15 @@ while option != 8:
     if option == 2:
         choix = 'o'
         while choix == 'o' or choix == 'O':
-            date_suppression = input('Date à supprimer : ')
-            OperationsCC['Date :'].remove(date_suppression)
-            libelle_suppression = input('Libellé à supprimer : ')
-            OperationsCC['Libellé :'].remove(libelle_suppression)
-            montant_suppression = float(input('Montant à supprimer : '))
-            OperationsCC['Montant :'].remove(montant_suppression)
+            try:
+                date_suppression = input('Date à supprimer : ')
+                OperationsCC['Date :'].remove(date_suppression)
+                libelle_suppression = input('Libellé à supprimer : ')
+                OperationsCC['Libellé :'].remove(libelle_suppression)
+                montant_suppression = float(input('Montant à supprimer : '))
+                OperationsCC['Montant :'].remove(montant_suppression)
+            except ValueError:
+                print('Erreur de saisie')
             choix = input('Nouvelle suppression (o/n) ? ')
         print()
 
@@ -96,6 +110,12 @@ while option != 8:
             OperationsLA['Libellé :'].append(libelle_operation)
             montant_operation = float(input('Montant : '))
             OperationsLA['Montant :'].append(montant_operation)
+            try:
+                montant_operation = float(input('Montant : '))
+                OperationsLA['Montant :'].append(montant_operation)
+            except ValueError:
+                print('Demande de saisie de chiffres...')
+                OperationsLA['Montant :'].append(0.00)
             choix = input('Nouvelle saisie (o/n) ? ')
         print()
 
@@ -103,12 +123,15 @@ while option != 8:
     if option == 4:
         choix = 'o'
         while choix == 'o' or choix == 'O':
-            date_suppression = input('Date à supprimer : ')
-            OperationsLA['Date :'].remove(date_suppression)
-            libelle_suppression = input('Libellé à supprimer : ')
-            OperationsLA['Libellé :'].remove(libelle_suppression)
-            montant_suppression = float(input('Montant à supprimer : '))
-            OperationsLA['Montant : '].remove(montant_suppression)
+            try:
+                date_suppression = input('Date à supprimer : ')
+                OperationsLA['Date :'].remove(date_suppression)
+                libelle_suppression = input('Libellé à supprimer : ')
+                OperationsLA['Libellé :'].remove(libelle_suppression)
+                montant_suppression = float(input('Montant à supprimer : '))
+                OperationsLA['Montant : '].remove(montant_suppression)
+            except ValueError:
+                print('Erreur de saisie')
             choix = input('Nouvelle suppression (o/n) ? ')
         print()
 
@@ -122,13 +145,19 @@ while option != 8:
         OperationsLA['Libellé :'].append(libelle_operation)
         compteDebite = input('Compte à débiter (CC/LA) : ')
         if compteDebite == 'cc' or compteDebite == 'CC':
-            montant_operation = float(input('Montant : '))
-            OperationsCC['Montant :'].append(- montant_operation)
-            OperationsLA['Montant :'].append(montant_operation)
+            try:
+                montant_operation = float(input('Montant : '))
+                OperationsCC['Montant :'].append(- montant_operation)
+                OperationsLA['Montant :'].append(montant_operation)
+            except ValueError:
+                print('Erreur de saisie')
         elif compteDebite == 'la' or compteDebite == 'LA':
-            montant_operation = float(input('Montant : '))
-            OperationsCC['Montant :'].append(montant_operation)
-            OperationsLA['Montant :'].append(-montant_operation)
+            try:
+                montant_operation = float(input('Montant : '))
+                OperationsCC['Montant :'].append(montant_operation)
+                OperationsLA['Montant :'].append(-montant_operation)
+            except ValueError:
+                print('Erreur de saisie')
         print()
 
     """Édition des opérations saisies"""
@@ -139,12 +168,16 @@ while option != 8:
                 print(k, v)
             cumulCC = sum(OperationsCC['Montant :'])
             print('Le solde du compte chèque :', round(cumulCC, 2), '€')
-        if option == 'la' or option == 'LA':
+            print()
+        elif option == 'la' or option == 'LA':
             for k, v in OperationsLA.items():
                 print(k, v)
             cumulLA = sum(OperationsLA['Montant :'])
             print('Le solde du livret A :', round(cumulLA, 2), '€')
-        print()
+            print()
+        else:
+            print('Erreur de saisie')
+            print()
 
     """Sauvegarde des données"""
     if option == 7:
