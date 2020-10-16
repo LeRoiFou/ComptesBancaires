@@ -1,6 +1,5 @@
 """
 Saisie de deux comptes bancaires : compte chèques et livret A
-À compléter avec les exceptions ;-)
 
 Éditeur : Laurent REYNAUD
 Date : 14-10-2020
@@ -16,35 +15,24 @@ class CompteBancaire:
         self.libelle = libelle
         self.montant = montant
 
-    """ Getters """
-    def get_date(self):
-        return self.date
-
-    def get_libelle(self):
-        return self.libelle
-
-    def get_montant(self):
-        return self.montant
-
 
 """Intanciation de la classe CompteBancaire et déclaration des valeurs des deux comptes bancaires en les convertissant
 sous la forme d'un dictionnaire afin de conserver les données saisies"""
 CompteCheque = CompteBancaire('01-01-20', 'Ouverture du compte chèque', 0.00)
 OperationsCC = {'Compte chèque :': '123',
-                'Date :': [CompteCheque.get_date()],
-                'Libellé :': [CompteCheque.get_libelle()],
-                'Montant :': [CompteCheque.get_montant()]}
+                'Date :': [CompteCheque.date()],
+                'Libellé :': [CompteCheque.libelle()],
+                'Montant :': [CompteCheque.montant()]}
 LivretA = CompteBancaire('01-01-20', 'Ouverture du livret A', 0.00)
 OperationsLA = {'Livret A :': '456',
-                'Date :': [LivretA.get_date()],
-                'Libellé :': [LivretA.get_libelle()],
-                'Montant :': [LivretA.get_montant()]}
+                'Date :': [LivretA.date()],
+                'Libellé :': [LivretA.libelle()],
+                'Montant :': [LivretA.montant()]}
 
-"""Sérialisation"""
-file = open('C:/Users/LRCOM/PycharmProjects/ComptesBancaires/MesComptes.txt', 'rb')
-OperationsCC = pickle.load(file)
-OperationsLA = pickle.load(file)
-file.close()
+"""Sérialisation (lecture du fichier)"""
+with open('C:/Users/LRCOM/PycharmProjects/ComptesBancaires/MesComptes.txt', 'rb') as file:
+    OperationsCC = pickle.load(file)
+    OperationsLA = pickle.load(file)
 
 """Menu général"""
 option = 0
@@ -60,11 +48,12 @@ while option != 8:
     print('8- Sortie du programme')
     try:
         option = int(input('Quelle option ? '))
-        if option < 1 or option > 8:
-            print('Le chiffre doit être compris entre 1 et 8... tu sais compter ?')
-            print()
+        assert 1 <= option <= 8
+    except AssertionError:
+        print('Le chiffre doit être compris entre 1 et 8... tu sais compter ?')
+        print()
     except ValueError:
-        print("Demande de saisie d'un chiffre...")
+        print('Chiffre requis...')
         print()
 
     """Saisie des opérations sur le compte chèque"""
@@ -179,12 +168,11 @@ while option != 8:
             print('Erreur de saisie')
             print()
 
-    """Sauvegarde des données"""
+    """Sauvegarde des données (écriture du fichier)"""
     if option == 7:
-        file = open('C:/Users/LRCOM/PycharmProjects/ComptesBancaires/MesComptes.txt', 'wb')
-        pickle.dump(OperationsCC, file)
-        pickle.dump(OperationsLA, file)
-        file.close()
+        with open('C:/Users/LRCOM/PycharmProjects/ComptesBancaires/MesComptes.txt', 'wb') as file:
+            pickle.dump(OperationsCC, file)
+            pickle.dump(OperationsLA, file)
         print('Sauvegarde effectuée !')
         print()
 
